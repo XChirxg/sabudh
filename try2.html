@@ -44,127 +44,6 @@
             font-weight: 400;
         }
 
-        .method-toggle {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .toggle-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #27272a;
-            color: #a1a1aa;
-            padding: 10px 18px;
-            border: 1px solid #3a3a3a;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .toggle-btn.active {
-            background: #3b82f6;
-            color: #fff;
-            border-color: #3b82f6;
-        }
-
-        .toggle-btn:hover {
-            background: #3a3a3a;
-            color: #fafafa;
-        }
-
-        .toggle-btn.active:hover {
-            background: #2563eb;
-        }
-
-        .method-container {
-            display: none;
-        }
-
-        .method-container.active {
-            display: block;
-        }
-
-        .iframe-view {
-            background: #1a1a1a;
-            border: 1px solid #27272a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 40px;
-        }
-
-        .iframe-view iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
-            border-radius: 8px;
-            background: white;
-        }
-
-        .info-banner {
-            background: #1a2a3a;
-            border: 1px solid #2a4a5a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            color: #93c5fd;
-        }
-
-        .info-banner h3 {
-            color: #dbeafe;
-            margin-bottom: 10px;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-banner p {
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        .info-banner ul {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-
-        .info-banner li {
-            margin: 6px 0;
-        }
-
-        .info-banner code {
-            background: #27272a;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: #fbbf24;
-        }
-
-        .refresh-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #27272a;
-            color: #a1a1aa;
-            padding: 10px 18px;
-            border: 1px solid #3a3a3a;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-
-        .refresh-btn:hover {
-            background: #3a3a3a;
-            color: #fafafa;
-        }
-
         .next-class-card {
             background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
             border: 1px solid #3a3a3a;
@@ -393,49 +272,10 @@
             100% { transform: rotate(360deg); }
         }
 
-        .no-classes {
-            text-align: center;
-            padding: 60px 20px;
-            color: #71717a;
-        }
-
-        .info-box {
-            background: #1a2a1a;
-            border: 1px solid #2a4a2a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            color: #86efac;
-        }
-
-        .info-box h3 {
-            color: #dcfce7;
-            margin-bottom: 10px;
-            font-size: 1rem;
-        }
-
-        .error-box {
-            background: #2a1a1a;
-            border: 1px solid #4a2a2a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            color: #fca5a5;
-        }
-
-        .error-box h3 {
-            color: #fecaca;
-            margin-bottom: 10px;
-            font-size: 1rem;
-        }
-
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             .next-class-title { font-size: 1.4rem; }
             .timeline { padding-left: 30px; }
-            .method-toggle {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -444,77 +284,19 @@
         <header>
             <h1>Class Schedule</h1>
             <div class="current-time" id="currentTime"></div>
-            
-            <div class="method-toggle">
-                <button class="toggle-btn active" onclick="switchMethod('iframe')">
-                    <i class="fas fa-table"></i>
-                    <span>View Full Spreadsheet</span>
-                </button>
-                <button class="toggle-btn" onclick="switchMethod('parsed')">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Parsed Schedule View</span>
-                </button>
-            </div>
         </header>
 
-        <!-- Iframe Method (Works without CORS issues) -->
-        <div id="iframeMethod" class="method-container active">
-            <div class="info-banner">
-                <h3><i class="fas fa-info-circle"></i> Direct Spreadsheet View</h3>
-                <p>This view embeds your Google Sheet directly. It always works, even when opening the HTML file locally!</p>
-            </div>
-            <div class="iframe-view">
-                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRLlOyqEaHPNh30MimU1fVXGgLF7nM1GH8TncetYvx7PqZQT5jtM5RUWfQrojt5bWxI10fDDbo7JfFQ/pubhtml?widget=true&headers=true"></iframe>
-            </div>
-        </div>
-
-        <!-- Parsed Method (Requires web server) -->
-        <div id="parsedMethod" class="method-container">
-            <div class="info-banner">
-                <h3><i class="fas fa-exclamation-triangle"></i> CORS Restriction Notice</h3>
-                <p>This parsed view requires the HTML to be hosted on a web server due to browser security (CORS policy).</p>
-                <p><strong>To make this work:</strong></p>
-                <ul>
-                    <li><strong>Option 1:</strong> Use the "View Full Spreadsheet" tab above (works immediately!)</li>
-                    <li><strong>Option 2:</strong> Host this HTML file on GitHub Pages, Netlify, or any web server</li>
-                    <li><strong>Option 3:</strong> Run a local server: <code>python -m http.server</code> then open <code>http://localhost:8000</code></li>
-                    <li><strong>Option 4:</strong> Upload to your website's hosting</li>
-                </ul>
-            </div>
-
-            <button class="refresh-btn" id="refreshBtn">
-                <i class="fas fa-sync-alt"></i>
-                <span>Refresh Schedule</span>
-            </button>
-
-            <div id="infoBox"></div>
-            <div id="nextClass"></div>
-            <div id="schedule"></div>
-            <div class="loading" id="loading" style="display: none;">
-                <i class="fas fa-circle-notch"></i>
-                <p>Loading schedule from Google Sheets...</p>
-            </div>
+        <div id="nextClass"></div>
+        <div id="schedule"></div>
+        <div class="loading" id="loading">
+            <i class="fas fa-circle-notch"></i>
+            <p>Loading schedule...</p>
         </div>
     </div>
 
     <script>
         let allClasses = [];
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRLlOyqEaHPNh30MimU1fVXGgLF7nM1GH8TncetYvx7PqZQT5jtM5RUWfQrojt5bWxI10fDDbo7JfFQ/pub?gid=0&single=true&output=csv';
-
-        function switchMethod(method) {
-            // Update button states
-            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.toggle-btn').classList.add('active');
-
-            // Show/hide methods
-            document.getElementById('iframeMethod').classList.toggle('active', method === 'iframe');
-            document.getElementById('parsedMethod').classList.toggle('active', method === 'parsed');
-
-            // Load schedule if switching to parsed view
-            if (method === 'parsed' && allClasses.length === 0) {
-                loadSchedule();
-            }
-        }
 
         function updateCurrentTime() {
             const now = new Date();
@@ -777,58 +559,24 @@
                 .filter(cls => cls.date && cls.topic);
             
             document.getElementById('loading').style.display = 'none';
-            
-            if (allClasses.length === 0) {
-                document.getElementById('infoBox').innerHTML = `
-                    <div class="error-box">
-                        <h3><i class="fas fa-exclamation-triangle"></i> No Classes Found</h3>
-                        <p>Could not parse schedule data. Please check the spreadsheet format.</p>
-                    </div>
-                `;
-                document.getElementById('schedule').innerHTML = '<div class="no-classes"><i class="far fa-calendar-times"></i><p>No classes found</p></div>';
-                return;
-            }
-
-            document.getElementById('infoBox').innerHTML = `
-                <div class="info-box">
-                    <h3><i class="fas fa-check-circle"></i> Schedule Loaded Successfully</h3>
-                    <p>Showing ${allClasses.length} classes from your Google Sheet.</p>
-                </div>
-            `;
-            
             renderNextClass();
             renderSchedule();
         }
 
         async function loadSchedule() {
             try {
-                document.getElementById('loading').style.display = 'block';
-                document.getElementById('infoBox').innerHTML = '';
-                
                 const response = await fetch(SHEET_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const csvText = await response.text();
                 const data = parseCSV(csvText);
                 processSheetData(data);
-                
             } catch (error) {
                 console.error('Error loading schedule:', error);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('infoBox').innerHTML = `
-                    <div class="error-box">
-                        <h3><i class="fas fa-exclamation-triangle"></i> CORS Error - Cannot Load CSV</h3>
-                        <p>This HTML file must be hosted on a web server to fetch data from Google Sheets.</p>
-                        <p style="margin-top: 10px;"><strong>Solution:</strong> Use the "View Full Spreadsheet" tab above, which works immediately!</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">Technical: ${error.message}</p>
-                    </div>
+                document.getElementById('loading').innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Failed to load schedule. Please refresh the page.</p>
                 `;
             }
         }
-
-        document.getElementById('refreshBtn').addEventListener('click', loadSchedule);
 
         updateCurrentTime();
         setInterval(updateCurrentTime, 60000);
@@ -838,6 +586,9 @@
                 renderSchedule();
             }
         }, 60000);
+        
+        setInterval(loadSchedule, 5 * 60 * 1000);
+        loadSchedule();
     </script>
 </body>
 </html>
