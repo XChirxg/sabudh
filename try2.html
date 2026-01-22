@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Schedule</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e4e4e7;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fafafa;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .current-time {
+            font-size: 1rem;
+            color: #a1a1aa;
+            font-weight: 400;
+        }
+
+        .method-toggle {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #27272a;
+            color: #a1a1aa;
+            padding: 10px 18px;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: #3b82f6;
+            color: #fff;
+            border-color: #3b82f6;
+        }
+
+        .toggle-btn:hover {
+            background: #3a3a3a;
+            color: #fafafa;
+        }
+
+        .toggle-btn.active:hover {
+            background: #2563eb;
+        }
+
+        .method-container {
+            display: none;
+        }
+
+        .method-container.active {
+            display: block;
+        }
+
+        .iframe-view {
+            background: #1a1a1a;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .iframe-view iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .info-banner {
+            background: #1a2a3a;
+            border: 1px solid #2a4a5a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #93c5fd;
+        }
+
+        .info-banner h3 {
+            color: #dbeafe;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-banner p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .info-banner ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .info-banner li {
+            margin: 6px 0;
+        }
+
+        .info-banner code {
+            background: #27272a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        .refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #27272a;
+            color: #a1a1aa;
+            padding: 10px 18px;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .refresh-btn:hover {
+            background: #3a3a3a;
+            color: #fafafa;
+        }
+
+        .next-class-card {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            border: 1px solid #3a3a3a;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-class-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        .next-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #71717a;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .next-class-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 20px;
+        }
+
+        .next-class-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            background: #27272a;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a1a1aa;
+        }
+
+        .detail-content h4 {
+            font-size: 0.75rem;
+            color: #71717a;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .detail-content p {
+            font-size: 1rem;
+            color: #fafafa;
+            font-weight: 500;
+        }
+
+        .countdown {
+            display: inline-block;
+            background: #27272a;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .timeline-section {
+            margin-bottom: 50px;
+        }
+
+        .day-header {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .day-date {
+            font-size: 0.9rem;
+            color: #71717a;
+            font-weight: 400;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #27272a;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            background: #1a1a1a;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            border-color: #3a3a3a;
+            transform: translateX(5px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 24px;
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 50%;
+            border: 3px solid #0a0a0a;
+        }
+
+        .timeline-item.completed::before {
+            background: #22c55e;
+        }
+
+        .timeline-item.ongoing::before {
+            background: #f59e0b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .class-time {
+            font-size: 0.85rem;
+            color: #a1a1aa;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .class-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 12px;
+        }
+
+        .class-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #a1a1aa;
+        }
+
+        .meta-item i {
+            color: #71717a;
+            font-size: 0.9rem;
+        }
+
+        .join-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #3b82f6;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+        }
+
+        .join-button:hover {
+            background: #2563eb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #71717a;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-classes {
+            text-align: center;
+            padding: 60px 20px;
+            color: #71717a;
+        }
+
+        .info-box {
+            background: #1a2a1a;
+            border: 1px solid #2a4a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #86efac;
+        }
+
+        .info-box h3 {
+            color: #dcfce7;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .error-box {
+            background: #2a1a1a;
+            border: 1px solid #4a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #fca5a5;
+        }
+
+        .error-box h3 {
+            color: #fecaca;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .next-class-title { font-size: 1.4rem; }
+            .timeline { padding-left: 30px; }
+            .method-toggle {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Class Schedule</h1>
+            <div class="current-time" id="currentTime"></div>
+            
+            <div class="method-toggle">
+                <button class="toggle-btn active" onclick="switchMethod('iframe')">
+                    <i class="fas fa-table"></i>
+                    <span>View Full Spreadsheet</span>
+                </button>
+                <button class="toggle-btn" onclick="switchMethod('parsed')">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Parsed Schedule View</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Iframe Method (Works without CORS issues) -->
+        <div id="iframeMethod" class="method-container active">
+            <div class="info-banner">
+                <h3><i class="fas fa-info-circle"></i> Direct Spreadsheet View</h3>
+                <p>This view embeds your Google Sheet directly. It always works, even when opening the HTML file locally!</p>
+            </div>
+            <div class="iframe-view">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRLlOyqEaHPNh30MimU1fVXGgLF7nM1GH8TncetYvx7PqZQT5jtM5RUWfQrojt5bWxI10fDDbo7JfFQ/pubhtml?widget=true&headers=true"></iframe>
+            </div>
+        </div>
+
+        <!-- Parsed Method (Requires web server) -->
+        <div id="parsedMethod" class="method-container">
+            <div class="info-banner">
+                <h3><i class="fas fa-exclamation-triangle"></i> CORS Restriction Notice</h3>
+                <p>This parsed view requires the HTML to be hosted on a web server due to browser security (CORS policy).</p>
+                <p><strong>To make this work:</strong></p>
+                <ul>
+                    <li><strong>Option 1:</strong> Use the "View Full Spreadsheet" tab above (works immediately!)</li>
+                    <li><strong>Option 2:</strong> Host this HTML file on GitHub Pages, Netlify, or any web server</li>
+                    <li><strong>Option 3:</strong> Run a local server: <code>python -m http.server</code> then open <code>http://localhost:8000</code></li>
+                    <li><strong>Option 4:</strong> Upload to your website's hosting</li>
+                </ul>
+            </div>
+
+            <button class="refresh-btn" id="refreshBtn">
+                <i class="fas fa-sync-alt"></i>
+                <span>Refresh Schedule</span>
+            </button>
+
+            <div id="infoBox"></div>
+            <div id="nextClass"></div>
+            <div id="schedule"></div>
+            <div class="loading" id="loading" style="display: none;">
+                <i class="fas fa-circle-notch"></i>
+                <p>Loading schedule from Google Sheets...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allClasses = [];
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRLlOyqEaHPNh30MimU1fVXGgLF7nM1GH8TncetYvx7PqZQT5jtM5RUWfQrojt5bWxI10fDDbo7JfFQ/pub?gid=0&single=true&output=csv';
+
+        function switchMethod(method) {
+            // Update button states
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.toggle-btn').classList.add('active');
+
+            // Show/hide methods
+            document.getElementById('iframeMethod').classList.toggle('active', method === 'iframe');
+            document.getElementById('parsedMethod').classList.toggle('active', method === 'parsed');
+
+            // Load schedule if switching to parsed view
+            if (method === 'parsed' && allClasses.length === 0) {
+                loadSchedule();
+            }
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentTime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        function parseTime(timeStr) {
+            if (!timeStr) return null;
+            const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+            if (!match) return null;
+            let [_, hours, minutes, period] = match;
+            hours = parseInt(hours);
+            minutes = parseInt(minutes);
+            if (period.toUpperCase() === 'PM' && hours !== 12) hours += 12;
+            if (period.toUpperCase() === 'AM' && hours === 12) hours = 0;
+            return { hours, minutes };
+        }
+
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('/');
+            if (parts.length !== 3) return null;
+            return new Date(parts[2], parts[0] - 1, parts[1]);
+        }
+
+        function getClassDateTime(cls) {
+            const date = parseDate(cls.date);
+            if (!date) return null;
+            const time = parseTime(cls.time.split(' - ')[0]);
+            if (!time) return null;
+            date.setHours(time.hours, time.minutes, 0, 0);
+            return date;
+        }
+
+        function getClassStatus(cls) {
+            const now = new Date();
+            const startTime = getClassDateTime(cls);
+            if (!startTime) return 'upcoming';
+            
+            const endMatch = cls.time.match(/- (\d{1,2}):(\d{2})\s*(AM|PM)/i);
+            if (!endMatch) return startTime > now ? 'upcoming' : 'completed';
+            
+            const endTime = new Date(startTime);
+            let [_, hours, minutes, period] = endMatch;
+            hours = parseInt(hours);
+            if (period.toUpperCase() === 'PM' && hours !== 12) hours += 12;
+            if (period.toUpperCase() === 'AM' && hours === 12) hours = 0;
+            endTime.setHours(hours, parseInt(minutes), 0, 0);
+            
+            if (now < startTime) return 'upcoming';
+            if (now > endTime) return 'completed';
+            return 'ongoing';
+        }
+
+        function getCountdown(cls) {
+            const now = new Date();
+            const startTime = getClassDateTime(cls);
+            if (!startTime || startTime < now) return null;
+            
+            const diff = startTime - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (days > 0) return `Starts in ${days}d ${hours}h`;
+            if (hours > 0) return `Starts in ${hours}h ${minutes}m`;
+            return `Starts in ${minutes}m`;
+        }
+
+        function extractMeetLink(joinInfo) {
+            const match = joinInfo.match(/meet\.google\.com\/[\w-]+/);
+            return match ? `https://${match[0]}` : null;
+        }
+
+        function renderNextClass() {
+            const upcoming = allClasses
+                .filter(cls => getClassStatus(cls) === 'upcoming')
+                .sort((a, b) => getClassDateTime(a) - getClassDateTime(b));
+            
+            if (upcoming.length === 0) {
+                document.getElementById('nextClass').innerHTML = '';
+                return;
+            }
+
+            const next = upcoming[0];
+            const countdown = getCountdown(next);
+            const meetLink = extractMeetLink(next.joiningInfo);
+            
+            document.getElementById('nextClass').innerHTML = `
+                <div class="next-class-card">
+                    <div class="next-label">Next Class</div>
+                    <h2 class="next-class-title">${next.topic}</h2>
+                    <div class="next-class-details">
+                        <div class="detail-item">
+                            <div class="detail-icon"><i class="far fa-calendar"></i></div>
+                            <div class="detail-content">
+                                <h4>Date & Time</h4>
+                                <p>${next.day}, ${next.date}<br>${next.time}</p>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-icon"><i class="far fa-user"></i></div>
+                            <div class="detail-content">
+                                <h4>Mentor</h4>
+                                <p>${next.mentor}</p>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-icon"><i class="far fa-bookmark"></i></div>
+                            <div class="detail-content">
+                                <h4>Module</h4>
+                                <p>${next.module}</p>
+                            </div>
+                        </div>
+                    </div>
+                    ${countdown ? `<div class="countdown"><i class="far fa-clock"></i> ${countdown}</div>` : ''}
+                    ${meetLink ? `<a href="${meetLink}" class="join-button" target="_blank"><i class="fas fa-video"></i> Join on Google Meet</a>` : ''}
+                </div>
+            `;
+        }
+
+        function renderSchedule() {
+            const byDate = {};
+            allClasses.forEach(cls => {
+                if (!byDate[cls.date]) byDate[cls.date] = [];
+                byDate[cls.date].push(cls);
+            });
+
+            let html = '';
+            Object.keys(byDate).sort((a, b) => parseDate(a) - parseDate(b)).forEach(date => {
+                const classes = byDate[date];
+                const day = classes[0].day;
+                
+                html += `
+                    <div class="timeline-section">
+                        <div class="day-header">
+                            ${day}
+                            <span class="day-date">${date}</span>
+                        </div>
+                        <div class="timeline">
+                `;
+                
+                classes.forEach(cls => {
+                    const status = getClassStatus(cls);
+                    const meetLink = extractMeetLink(cls.joiningInfo);
+                    
+                    html += `
+                        <div class="timeline-item ${status}">
+                            <div class="class-time"><i class="far fa-clock"></i> ${cls.time}</div>
+                            <div class="class-title">${cls.topic}</div>
+                            <div class="class-meta">
+                                <div class="meta-item">
+                                    <i class="far fa-user"></i>
+                                    <span>${cls.mentor}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="far fa-bookmark"></i>
+                                    <span>${cls.module}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="far fa-desktop"></i>
+                                    <span>${cls.platform}</span>
+                                </div>
+                            </div>
+                            ${meetLink && status !== 'completed' ? `<a href="${meetLink}" class="join-button" target="_blank"><i class="fas fa-video"></i> Join Meeting</a>` : ''}
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            });
+
+            document.getElementById('schedule').innerHTML = html;
+        }
+
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            if (lines.length === 0) return [];
+            
+            const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+            const rows = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let char of lines[i]) {
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim().replace(/^"|"$/g, ''));
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim().replace(/^"|"$/g, ''));
+                
+                const row = {};
+                headers.forEach((header, idx) => {
+                    row[header] = values[idx] || '';
+                });
+                rows.push(row);
+            }
+            
+            return rows;
+        }
+
+        function processSheetData(data) {
+            const getField = (row, ...names) => {
+                for (let name of names) {
+                    const val = row[name];
+                    if (val !== undefined && val !== null && val !== '') {
+                        return String(val).trim();
+                    }
+                }
+                return '';
+            };
+            
+            let lastWeek = '';
+            let lastDate = '';
+            let lastDay = '';
+            
+            allClasses = data
+                .filter(row => {
+                    const topic = getField(row, 'Topic', 'topic', 'TOPIC');
+                    return topic;
+                })
+                .map(row => {
+                    const currentWeek = getField(row, 'Week', 'week', 'WEEK');
+                    const currentDate = getField(row, 'Date', 'date', 'DATE');
+                    const currentDay = getField(row, 'Day', 'day', 'DAY');
+                    
+                    if (currentWeek) lastWeek = currentWeek;
+                    if (currentDate) lastDate = currentDate;
+                    if (currentDay) lastDay = currentDay;
+                    
+                    return {
+                        week: currentWeek || lastWeek,
+                        date: currentDate || lastDate,
+                        day: currentDay || lastDay,
+                        topic: getField(row, 'Topic', 'topic', 'TOPIC'),
+                        platform: getField(row, 'Platform', 'platform', 'PLATFORM'),
+                        joiningInfo: getField(row, 'Joining Info', 'JoiningInfo', 'joining info', 'JOINING INFO'),
+                        time: getField(row, 'Time', 'time', 'TIME'),
+                        module: getField(row, 'Module', 'module', 'MODULE'),
+                        mentor: getField(row, 'Mentor', 'mentor', 'MENTOR'),
+                        recordingStatus: getField(row, 'Recording Status', 'RecordingStatus', 'recording status', 'RECORDING STATUS')
+                    };
+                })
+                .filter(cls => cls.date && cls.topic);
+            
+            document.getElementById('loading').style.display = 'none';
+            
+            if (allClasses.length === 0) {
+                document.getElementById('infoBox').innerHTML = `
+                    <div class="error-box">
+                        <h3><i class="fas fa-exclamation-triangle"></i> No Classes Found</h3>
+                        <p>Could not parse schedule data. Please check the spreadsheet format.</p>
+                    </div>
+                `;
+                document.getElementById('schedule').innerHTML = '<div class="no-classes"><i class="far fa-calendar-times"></i><p>No classes found</p></div>';
+                return;
+            }
+
+            document.getElementById('infoBox').innerHTML = `
+                <div class="info-box">
+                    <h3><i class="fas fa-check-circle"></i> Schedule Loaded Successfully</h3>
+                    <p>Showing ${allClasses.length} classes from your Google Sheet.</p>
+                </div>
+            `;
+            
+            renderNextClass();
+            renderSchedule();
+        }
+
+        async function loadSchedule() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('infoBox').innerHTML = '';
+                
+                const response = await fetch(SHEET_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                processSheetData(data);
+                
+            } catch (error) {
+                console.error('Error loading schedule:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('infoBox').innerHTML = `
+                    <div class="error-box">
+                        <h3><i class="fas fa-exclamation-triangle"></i> CORS Error - Cannot Load CSV</h3>
+                        <p>This HTML file must be hosted on a web server to fetch data from Google Sheets.</p>
+                        <p style="margin-top: 10px;"><strong>Solution:</strong> Use the "View Full Spreadsheet" tab above, which works immediately!</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">Technical: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        document.getElementById('refreshBtn').addEventListener('click', loadSchedule);
+
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 60000);
+        setInterval(() => {
+            if (allClasses.length > 0) {
+                renderNextClass();
+                renderSchedule();
+            }
+        }, 60000);
+    </script>
+</body>
+</html>
