@@ -533,6 +533,78 @@
             document.getElementById('schedule').innerHTML = html;
         }
 
+        function processCSVData(results) {
+            console.log('Headers found:', results.meta.fields);
+            console.log('First 3 rows:', results.data.slice(0, 3));
+            console.log('Total rows:', results.data.length);
+            
+            // Get all possible header variations
+            const getField = (row, ...names) => {
+                for (let name of names) {
+                    const val = row[name];
+                    if (val !== undefined && val !== null && val !== '') {
+                        return String(val).trim();
+                    }
+                }
+                return '';
+            };
+            
+            // Track last known values for date, day, week (for merged cells)
+            let lastWeek = '';
+            let lastDate = '';
+            let lastDay = '';
+            
+            allClasses = results.data
+                .filter(row => {
+                    const topic = getField(row, 'Topic', 'topic', 'TOPIC');
+                    return topic; // Only need topic to exist
+                })
+                .map(row => {
+                    // Get current values or use last known (for merged cells)
+                    const currentWeek = getField(row, 'Week', 'week', 'WEEK');
+                    const currentDate = getField(row, 'Date', 'date', 'DATE');
+                    const currentDay = getField(row, 'Day', 'day', 'DAY');
+                    
+                    if (currentWeek) lastWeek = currentWeek;
+                    if (currentDate) lastDate = currentDate;
+                    if (currentDay) lastDay = currentDay;
+                    
+                    const cls = {
+                        week: currentWeek || lastWeek,
+                        date: currentDate || lastDate,
+                        day: currentDay || lastDay,
+                        topic: getField(row, 'Topic', 'topic', 'TOPIC'),
+                        platform: getField(row, 'Platform', 'platform', 'PLATFORM'),
+                        joiningInfo: getField(row, 'Joining Info', 'JoiningInfo', 'joining info', 'JOINING INFO'),
+                        time: getField(row, 'Time', 'time', 'TIME'),
+                        module: getField(row, 'Module', 'module', 'MODULE'),
+                        mentor: getField(row, 'Mentor', 'mentor', 'MENTOR'),
+                        recordingStatus: getField(row, 'Recording Status', 'RecordingStatus', 'recording status', 'RECORDING STATUS')
+                    };
+                    console.log('Mapped class:', cls);
+                    return cls;
+                })
+                .filter(cls => cls.date && cls.topic); // Final filter for valid classes
+            
+            console.log('Total classes processed:', allClasses.length);
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('infoBox').innerHTML = `
+                <div class="info-box">
+                    <h3><i class="fas fa-check-circle"></i> Schedule Loaded Successfully</h3>
+                    <p>Showing ${allClasses.length} classes. Upload a new CSV anytime to update.</p>
+                </div>
+            `;
+            
+            if (allClasses.length === 0) {
+                document.getElementById('schedule').innerHTML = '<div class="no-classes"><i class="far fa-calendar-times"></i><p>No classes found in CSV</p></div>';
+                return;
+            }
+            
+            renderNextClass();
+            renderSchedule();
+        }
+
         function loadScheduleFromFile(file) {
             Papa.parse(file, {
                 header: true,
@@ -543,62 +615,7 @@
                 },
                 complete: function(results) {
                     console.log('CSV Parsed:', results);
-                    console.log('Headers found:', results.meta.fields);
-                    console.log('First row:', results.data[0]);
-                    console.log('Total rows:', results.data.length);
-                    
-                    // Get all possible header variations
-                    const getField = (row, ...names) => {
-                        for (let name of names) {
-                            const val = row[name];
-                            if (val !== undefined && val !== null && val !== '') {
-                                return String(val).trim();
-                            }
-                        }
-                        return '';
-                    };
-                    
-                    allClasses = results.data
-                        .filter(row => {
-                            const date = getField(row, 'Date', 'date', 'DATE');
-                            const topic = getField(row, 'Topic', 'topic', 'TOPIC');
-                            console.log('Row check - Date:', date, 'Topic:', topic);
-                            return date && topic;
-                        })
-                        .map(row => {
-                            const cls = {
-                                week: getField(row, 'Week', 'week', 'WEEK'),
-                                date: getField(row, 'Date', 'date', 'DATE'),
-                                day: getField(row, 'Day', 'day', 'DAY'),
-                                topic: getField(row, 'Topic', 'topic', 'TOPIC'),
-                                platform: getField(row, 'Platform', 'platform', 'PLATFORM'),
-                                joiningInfo: getField(row, 'Joining Info', 'JoiningInfo', 'joining info', 'JOINING INFO'),
-                                time: getField(row, 'Time', 'time', 'TIME'),
-                                module: getField(row, 'Module', 'module', 'MODULE'),
-                                mentor: getField(row, 'Mentor', 'mentor', 'MENTOR'),
-                                recordingStatus: getField(row, 'Recording Status', 'RecordingStatus', 'recording status', 'RECORDING STATUS')
-                            };
-                            console.log('Mapped class:', cls);
-                            return cls;
-                        });
-                    
-                    console.log('Processed classes:', allClasses);
-                    
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('infoBox').innerHTML = `
-                        <div class="info-box">
-                            <h3><i class="fas fa-check-circle"></i> Schedule Loaded Successfully</h3>
-                            <p>Showing ${allClasses.length} classes. Upload a new CSV anytime to update.</p>
-                        </div>
-                    `;
-                    
-                    if (allClasses.length === 0) {
-                        document.getElementById('schedule').innerHTML = '<div class="no-classes"><i class="far fa-calendar-times"></i><p>No classes found in CSV</p></div>';
-                        return;
-                    }
-                    
-                    renderNextClass();
-                    renderSchedule();
+                    processCSVData(results);
                 },
                 error: function(error) {
                     document.getElementById('loading').innerHTML = `
@@ -619,6 +636,32 @@
             }
         });
 
+        // Try to auto-load schedule.csv from same folder
+        async function autoLoadSchedule() {
+            try {
+                const response = await fetch('schedule.csv');
+                if (response.ok) {
+                    const csvText = await response.text();
+                    Papa.parse(csvText, {
+                        header: true,
+                        skipEmptyLines: true,
+                        dynamicTyping: false,
+                        transformHeader: function(header) {
+                            return header.trim();
+                        },
+                        complete: function(results) {
+                            console.log('Auto-loaded CSV:', results);
+                            processCSVData(results);
+                        }
+                    });
+                } else {
+                    console.log('No schedule.csv found, waiting for manual upload');
+                }
+            } catch (error) {
+                console.log('Could not auto-load schedule.csv:', error);
+            }
+        }
+
         updateCurrentTime();
         setInterval(updateCurrentTime, 60000);
         setInterval(() => {
@@ -627,6 +670,8 @@
                 renderSchedule();
             }
         }, 60000);
+        
+        autoLoadSchedule();
     </script>
 </body>
 </html>
