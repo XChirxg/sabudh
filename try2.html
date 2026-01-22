@@ -21,47 +21,84 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 30px 20px;
         }
 
         header {
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             color: #fafafa;
-            margin-bottom: 10px;
-            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
 
         .current-time {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #a1a1aa;
             font-weight: 400;
+        }
+
+        .ongoing-class-card {
+            background: linear-gradient(135deg, #2a1a1a 0%, #3a2a2a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.5); }
+        }
+
+        .ongoing-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #f59e0b;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ongoing-class-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 12px;
+        }
+
+        .ongoing-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #d4d4d8;
+        }
+
+        .ongoing-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .next-class-card {
             background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
             border: 1px solid #3a3a3a;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .next-class-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
         }
 
         .next-label {
@@ -70,187 +107,129 @@
             letter-spacing: 0.1em;
             color: #71717a;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .next-class-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #fafafa;
-            margin-bottom: 20px;
-        }
-
-        .next-class-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .detail-icon {
-            width: 40px;
-            height: 40px;
-            background: #27272a;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #a1a1aa;
-        }
-
-        .detail-content h4 {
-            font-size: 0.75rem;
-            color: #71717a;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .detail-content p {
-            font-size: 1rem;
-            color: #fafafa;
-            font-weight: 500;
-        }
-
-        .countdown {
-            display: inline-block;
-            background: #27272a;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: #3b82f6;
-            font-weight: 600;
-            margin-top: 15px;
-        }
-
-        .timeline-section {
-            margin-bottom: 50px;
-        }
-
-        .day-header {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #fafafa;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .day-date {
-            font-size: 0.9rem;
-            color: #71717a;
-            font-weight: 400;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 40px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #27272a;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 30px;
-            background: #1a1a1a;
-            border: 1px solid #27272a;
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .timeline-item:hover {
-            border-color: #3a3a3a;
-            transform: translateX(5px);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -32px;
-            top: 24px;
-            width: 16px;
-            height: 16px;
-            background: #3b82f6;
-            border-radius: 50%;
-            border: 3px solid #0a0a0a;
-        }
-
-        .timeline-item.completed::before {
-            background: #22c55e;
-        }
-
-        .timeline-item.ongoing::before {
-            background: #f59e0b;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .class-time {
-            font-size: 0.85rem;
-            color: #a1a1aa;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .class-title {
-            font-size: 1.15rem;
+            font-size: 1.4rem;
             font-weight: 600;
             color: #fafafa;
             margin-bottom: 12px;
         }
 
+        .next-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #d4d4d8;
+        }
+
+        .next-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .countdown {
+            display: inline-block;
+            background: #27272a;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .timeline-section {
+            margin-bottom: 40px;
+        }
+
+        .day-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .day-date {
+            font-size: 0.85rem;
+            color: #71717a;
+            font-weight: 400;
+        }
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .class-card {
+            background: #1a1a1a;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .class-card.completed {
+            opacity: 0.6;
+        }
+
+        .class-card.ongoing {
+            border-color: #f59e0b;
+            background: #2a2a1a;
+        }
+
+        .class-time {
+            font-size: 1rem;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .class-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 8px;
+        }
+
         .class-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #a1a1aa;
+            margin-bottom: 8px;
         }
 
         .meta-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-            color: #a1a1aa;
-        }
-
-        .meta-item i {
-            color: #71717a;
-            font-size: 0.9rem;
+            gap: 4px;
         }
 
         .join-button {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: #3b82f6;
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 8px 14px;
+            border-radius: 6px;
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 500;
-            transition: all 0.3s ease;
-            margin-top: 12px;
+            width: 100%;
+            justify-content: center;
         }
 
         .join-button:hover {
@@ -273,9 +252,10 @@
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .next-class-title { font-size: 1.4rem; }
-            .timeline { padding-left: 30px; }
+            h1 { font-size: 1.5rem; }
+            .class-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -286,6 +266,7 @@
             <div class="current-time" id="currentTime"></div>
         </header>
 
+        <div id="ongoingClass"></div>
         <div id="nextClass"></div>
         <div id="schedule"></div>
         <div class="loading" id="loading">
@@ -359,6 +340,19 @@
             return 'ongoing';
         }
 
+        function getTimeSinceStart(cls) {
+            const now = new Date();
+            const startTime = getClassDateTime(cls);
+            if (!startTime) return null;
+            
+            const diff = now - startTime;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (hours > 0) return `Started ${hours}h ${minutes}m ago`;
+            return `Started ${minutes}m ago`;
+        }
+
         function getCountdown(cls) {
             const now = new Date();
             const startTime = getClassDateTime(cls);
@@ -375,8 +369,46 @@
         }
 
         function extractMeetLink(joinInfo) {
-            const match = joinInfo.match(/meet\.google\.com\/[\w-]+/);
-            return match ? `https://${match[0]}` : null;
+            if (!joinInfo) return null;
+            
+            // Try to match Google Meet links in various formats
+            let match = joinInfo.match(/https?:\/\/meet\.google\.com\/[\w-]+/i);
+            if (match) return match[0];
+            
+            match = joinInfo.match(/meet\.google\.com\/[\w-]+/i);
+            if (match) return `https://${match[0]}`;
+            
+            return null;
+        }
+
+        function renderOngoingClass() {
+            const ongoing = allClasses.filter(cls => getClassStatus(cls) === 'ongoing');
+            
+            if (ongoing.length === 0) {
+                document.getElementById('ongoingClass').innerHTML = '';
+                return;
+            }
+
+            const current = ongoing[0];
+            const timeSinceStart = getTimeSinceStart(current);
+            const meetLink = extractMeetLink(current.joiningInfo);
+            
+            document.getElementById('ongoingClass').innerHTML = `
+                <div class="ongoing-class-card">
+                    <div class="ongoing-label">
+                        <i class="fas fa-circle" style="color: #f59e0b; animation: pulse 2s infinite;"></i>
+                        CLASS IN PROGRESS
+                    </div>
+                    <h2 class="ongoing-class-title">${current.topic}</h2>
+                    <div class="ongoing-info">
+                        <span><i class="far fa-clock"></i> ${current.time}</span>
+                        <span><i class="far fa-user"></i> ${current.mentor}</span>
+                        <span><i class="far fa-bookmark"></i> ${current.module}</span>
+                        ${timeSinceStart ? `<span style="color: #f59e0b;"><i class="fas fa-hourglass-half"></i> ${timeSinceStart}</span>` : ''}
+                    </div>
+                    ${meetLink ? `<a href="${meetLink}" class="join-button" target="_blank"><i class="fas fa-video"></i> Join Now</a>` : ''}
+                </div>
+            `;
         }
 
         function renderNextClass() {
@@ -395,33 +427,16 @@
             
             document.getElementById('nextClass').innerHTML = `
                 <div class="next-class-card">
-                    <div class="next-label">Next Class</div>
+                    <div class="next-label">NEXT CLASS</div>
                     <h2 class="next-class-title">${next.topic}</h2>
-                    <div class="next-class-details">
-                        <div class="detail-item">
-                            <div class="detail-icon"><i class="far fa-calendar"></i></div>
-                            <div class="detail-content">
-                                <h4>Date & Time</h4>
-                                <p>${next.day}, ${next.date}<br>${next.time}</p>
-                            </div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-icon"><i class="far fa-user"></i></div>
-                            <div class="detail-content">
-                                <h4>Mentor</h4>
-                                <p>${next.mentor}</p>
-                            </div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-icon"><i class="far fa-bookmark"></i></div>
-                            <div class="detail-content">
-                                <h4>Module</h4>
-                                <p>${next.module}</p>
-                            </div>
-                        </div>
+                    <div class="next-info">
+                        <span><i class="far fa-clock"></i> ${next.time}</span>
+                        <span><i class="far fa-calendar"></i> ${next.day}, ${next.date}</span>
+                        <span><i class="far fa-user"></i> ${next.mentor}</span>
+                        <span><i class="far fa-bookmark"></i> ${next.module}</span>
                     </div>
                     ${countdown ? `<div class="countdown"><i class="far fa-clock"></i> ${countdown}</div>` : ''}
-                    ${meetLink ? `<a href="${meetLink}" class="join-button" target="_blank"><i class="fas fa-video"></i> Join on Google Meet</a>` : ''}
+                    ${meetLink ? `<a href="${meetLink}" class="join-button" target="_blank" style="margin-top: 12px;"><i class="fas fa-video"></i> Join on Google Meet</a>` : ''}
                 </div>
             `;
         }
@@ -444,29 +459,29 @@
                             ${day}
                             <span class="day-date">${date}</span>
                         </div>
-                        <div class="timeline">
+                        <div class="class-grid">
                 `;
                 
                 classes.forEach(cls => {
                     const status = getClassStatus(cls);
                     const meetLink = extractMeetLink(cls.joiningInfo);
+                    const startTime = cls.time.split(' - ')[0];
                     
                     html += `
-                        <div class="timeline-item ${status}">
-                            <div class="class-time"><i class="far fa-clock"></i> ${cls.time}</div>
+                        <div class="class-card ${status}">
+                            <div class="class-time">
+                                <i class="far fa-clock"></i>
+                                ${startTime}
+                            </div>
                             <div class="class-title">${cls.topic}</div>
                             <div class="class-meta">
                                 <div class="meta-item">
                                     <i class="far fa-user"></i>
-                                    <span>${cls.mentor}</span>
+                                    ${cls.mentor}
                                 </div>
                                 <div class="meta-item">
                                     <i class="far fa-bookmark"></i>
-                                    <span>${cls.module}</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="far fa-desktop"></i>
-                                    <span>${cls.platform}</span>
+                                    ${cls.module}
                                 </div>
                             </div>
                             ${meetLink && status !== 'completed' ? `<a href="${meetLink}" class="join-button" target="_blank"><i class="fas fa-video"></i> Join Meeting</a>` : ''}
@@ -549,7 +564,7 @@
                         day: currentDay || lastDay,
                         topic: getField(row, 'Topic', 'topic', 'TOPIC'),
                         platform: getField(row, 'Platform', 'platform', 'PLATFORM'),
-                        joiningInfo: getField(row, 'Joining Info', 'JoiningInfo', 'joining info', 'JOINING INFO'),
+                        joiningInfo: getField(row, 'Joining Info', 'JoiningInfo', 'joining info', 'JOINING INFO', 'Joining info'),
                         time: getField(row, 'Time', 'time', 'TIME'),
                         module: getField(row, 'Module', 'module', 'MODULE'),
                         mentor: getField(row, 'Mentor', 'mentor', 'MENTOR'),
@@ -559,6 +574,7 @@
                 .filter(cls => cls.date && cls.topic);
             
             document.getElementById('loading').style.display = 'none';
+            renderOngoingClass();
             renderNextClass();
             renderSchedule();
         }
@@ -582,6 +598,7 @@
         setInterval(updateCurrentTime, 60000);
         setInterval(() => {
             if (allClasses.length > 0) {
+                renderOngoingClass();
                 renderNextClass();
                 renderSchedule();
             }
